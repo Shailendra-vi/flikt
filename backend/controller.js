@@ -44,16 +44,37 @@ const controller = {
         try {
             const user = await User.findOne({ email });
             if (!user) {
-                return res.status(401).json({ message: 'Invalid user' });
+                return res.status(201).json({ message: 'Invalid user' });
             }
 
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
-                return res.status(401).json({ message: 'Invalid password' });
+                return res.status(201).json({ message: 'Invalid password' });
             }
 
-            const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '7d' });
-            res.json({ token, message: 'Login successful', userId: user._id, name: user.name, email: user.email });
+            let newtoken = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '7d' });
+            res.json({ token: newtoken, message: 'Login successful', userId: user._id, name: user.name, email: user.email });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+    getUser: async (req, res) => {
+        const { token } = req.body;
+        try {
+            let user
+            let userId;
+            if (token) {
+                const decoded = jwt.verify(token, secretKey);
+                req.userId = decoded.userId;
+                userId = decoded.userId
+            }
+            if (userId)
+                user = await User.findById(userId);
+            if (!user) {
+                res.status(404).json({ success: false, message: "User not found" });
+            }
+            res.json({ userId: user._id, name: user.name, email: user.email })
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Internal server error' });
@@ -102,7 +123,41 @@ const controller = {
             console.error(error);
             res.status(500).json({ success: false, message: "Internal Server Error" });
         }
-    }
+    },
+
+    addUpdateUserDataList: async (req, res) => {
+        const userId = req.params.id;
+        const dataList = req.body.dataList;
+        try {
+            const user = await User.findByIdAndUpdate(
+                userId,
+                { dataList },
+                { new: true }
+            );
+            if (user) {
+                res.json({ success: true, message: "UserList added successfully" });
+            } else {
+                res.status(404).json({ success: false, message: "User not found" });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    },
+    getList: async (req, res) => {
+        const userId = req.params.id;
+        try {
+            const user = await User.findById(userId);
+            if (user) {
+                res.json({ success: true, message: "fetched user data successfully", dataList: user.dataList });
+            } else {
+                res.status(404).json({ success: false, message: "User not found" });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    },
 }
 
 module.exports = controller;

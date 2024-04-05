@@ -7,6 +7,8 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [error, setError] = useState(null)
+
   const navigate = useNavigate();
 
   const handleFullNameChange = (e) => {
@@ -21,7 +23,7 @@ const Register = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Full Name:', fullName);
     console.log('Email:', email);
@@ -37,8 +39,9 @@ const Register = () => {
         localStorage.setItem('authToken', res.data.token);
         navigate('/Login');
       }
+      setError(null)
     } catch (error) {
-      console.log(error);
+      setError(error.response.data.message)
       console.log(error.response.data);
     }
   };
@@ -48,40 +51,44 @@ const Register = () => {
   };
 
   return (
-    <div className="signup-container">
+    <div className="register-container">
       <h2>Signup</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
+      <form onSubmit={handleSubmit} className="register-form">
+        <div className="input-group">
           <input
             type="text"
             value={fullName}
             onChange={handleFullNameChange}
-            placeholder="Enter your full name"
+            placeholder="Enter your Full Name"
             required
+            className="register-input"
           />
         </div>
-        <div className="form-group">
+        <div className="input-group">
           <input
             type="email"
             value={email}
             onChange={handleEmailChange}
-            placeholder="Enter your email"
+            placeholder="Enter your Email-ID"
             required
+            className="register-input"
           />
         </div>
-        <div className="form-group">
+        <div className="input-group">
           <input
             type="password"
             value={password}
             onChange={handlePasswordChange}
-            placeholder="Enter your password"
+            placeholder="Enter your Password"
             required
+            className="register-input"
           />
         </div>
-        <button type="submit">Signup</button>
+        {error ? <div className='error'>{error}</div> : <></>}
+        <button type="submit" className="register-btn">Signup</button>
       </form>
-      <div className="additional-links">
-        Already have an account? <button onClick={handleLoginClick}>Login</button>
+      <div className="create-account">
+        <button onClick={handleLoginClick} className="login-btn login-btn-2">Back to Login</button>
       </div>
     </div>
   );

@@ -19,6 +19,11 @@ app.post('/login', controller.login);
 app.delete('/users/:id', controller.deleteUser);
 app.put('/update-users/:id', controller.updateUser);
 
+app.post('/addlist/:id', controller.addUpdateUserDataList);
+app.get('/getlist/:id', controller.getList)
+
+app.post('/getuser', controller.getUser)
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -50,49 +50,58 @@ const Update = ({ userData, setUserData }) => {
         navigate('/register')
     }
 
+    const handleHome = () => {
+        navigate('/')
+    }
+
     return (
-        <>
-            {userData ? <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        value={fullName}
-                        onChange={handleFullNameChange}
-                        placeholder="Enter new name"
-
-                    />
-                </div>
-                <div className="form-group">
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={handleEmailChange}
-                        placeholder="Enter new email"
-
-                    />
-                </div>
-                <div className="form-group">
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                        placeholder="Enter new password"
-
-                    />
-                </div>
-                <button type="submit">Update</button>
-            </form> : <div className="container">
-                <div className="welcome-container">
-                    <div className="welcome-box">
-                        <h2>Welcome to Our Website!</h2>
-                        <p>
-                            Please login to continue. <button onClick={() => handleLogin()}>Login</button><br />
-                            New User? <button onClick={() => handleRegister()}>Register</button><br />
-                        </p>
+        <div className="update-container">
+            {userData ? (
+                <>
+                    <form onSubmit={handleSubmit} className="update-form">
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                value={fullName}
+                                onChange={handleFullNameChange}
+                                placeholder="Enter new name"
+                                className="update-input"
+                            />
+                        </div>
+                        <div className="input-group">
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={handleEmailChange}
+                                placeholder="Enter new email"
+                                className="update-input"
+                            />
+                        </div>
+                        <div className="input-group">
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={handlePasswordChange}
+                                placeholder="Enter new password"
+                                className="update-input"
+                            />
+                        </div>
+                        <button type="submit" className="update-btn">Update</button>
+                    </form>
+                    <div className="create-account">
+                        <button onClick={handleHome} className="login-btn">Home</button>
                     </div>
+                </>
+            ) : (
+                <div className="welcome-msg">
+                    <h2>Welcome to Flikt!</h2>
+                    <p>
+                        Please login to continue. <button onClick={handleLogin} className="login-btn">Login</button><br />
+                        New User? <button onClick={handleRegister} className="register-btn">Register</button><br />
+                    </p>
                 </div>
-            </div>}
-        </>
+            )}
+        </div>
     )
 }
 

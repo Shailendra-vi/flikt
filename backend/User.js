@@ -14,6 +14,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  dataList: [
+    {
+      name: String,
+      email: String,
+      address: String,
+      phoneNumber: String,
+      gender: String,
+    }
+  ]
 });
 
 const User = mongoose.model('User', userSchema);
