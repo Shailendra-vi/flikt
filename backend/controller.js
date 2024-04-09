@@ -52,7 +52,7 @@ const controller = {
                 return res.status(201).json({ message: 'Invalid password' });
             }
 
-            let newtoken = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '7d' });
+            let newtoken = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '7h' });
             res.json({ token: newtoken, message: 'Login successful', userId: user._id, name: user.name, email: user.email });
         } catch (error) {
             console.error(error);

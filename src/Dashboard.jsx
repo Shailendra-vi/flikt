@@ -50,7 +50,7 @@ const Dashboard = ({ userData, setUserData }) => {
             }
         };
         setDataList();
-    }, [inputData.length]);
+    }, [inputData]);
 
     const [formData, setFormData] = useState({
         name: "",
